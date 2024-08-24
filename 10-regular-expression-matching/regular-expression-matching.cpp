@@ -1,7 +1,7 @@
 class Solution {
 public:
     int dp[21][21];
-    bool solve(int i, int j,string s, string p){
+    bool solve(int i, int j,string &s, string &p){
         int m=s.size();
         int n=p.size();
         if(j==n){
