@@ -10,22 +10,22 @@ public:
         return 0;*/
 
         //approach using linear TC and O(1) space 
-        int cnt=0;
-        int cand=0;
-
-        for(int it:nums){
+        //Booyers Moore Voting Algorithm
+        int n=nums.size();
+        int cnt=1;
+        int maj=nums[0];
+        for(int i=1;i<n;i++){
             if(cnt==0){
-                cand=it;
+                maj=nums[i];
+                cnt=1;
             }
-
-            if(it==cand){
+            else if(nums[i]==maj){
                 cnt++;
             }
             else{
                 cnt--;
             }
         }
-        
-        return cand;
+        return maj;
     }
 };
