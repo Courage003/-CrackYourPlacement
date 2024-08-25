@@ -15,13 +15,14 @@ public:
         int cnt=1;
         int maj=nums[0];
         for(int i=1;i<n;i++){
-            if(cnt==0){
+            if(nums[i]==maj){
+                cnt++;
+            }
+            else if(cnt==0){
                 maj=nums[i];
                 cnt=1;
             }
-            else if(nums[i]==maj){
-                cnt++;
-            }
+            
             else{
                 cnt--;
             }
