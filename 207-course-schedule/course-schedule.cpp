@@ -1,53 +1,59 @@
 class Solution {
     
 public:
-    void dfs(int u, unordered_map<int,vector<int>>&adj, vector<int>&vis, stack<int>&st, bool &cycle){
-        vis[u]=1;
+    bool isCycle=false;
 
-        for(auto &i: adj[u]){
-            if(vis[i]==0){
-                dfs(i,adj,vis,st,cycle);
+    void dfs(unordered_map<int,vector<int>>&adj, int u, stack<int>&st, vector<bool>&vis, vector<bool>&inRecursion){
+        vis[u]=true;
+        inRecursion[u]=true;
+        //marked true because
+        for(auto it:adj[u]){
+            if(!vis[it] && inRecursion[it]==false){
+                dfs(adj,it,st,vis,inRecursion);
+
             }
-            else if(vis[i]==1){
-                cycle=true;
+            else if(inRecursion[it]==true){
+                isCycle=true;
                 return;
             }
         }
-        vis[u]=2;
         st.push(u);
+        inRecursion[u]=false;
+
     }
-    vector<int>topoSort(vector<vector<int>>&edges, int n){
-        unordered_map<int, vector<int>>adj;
-        for(auto &it: edges){
+    vector<int>topoSort(vector<vector<int>>& prerequisites, int n){
+        unordered_map<int,vector<int>>adj;
+        for(auto it:prerequisites){
             int u=it[0];
             int v=it[1];
-            adj[u].push_back(v);
+            adj[v].push_back(u);
         }
-        vector<int>vis(n+1,0);
+        //adjacency list
+        vector<bool>vis(n,false);
+        vector<bool>inRecursion(n,false);
+        //taken for keeping track of cycle from the source
         stack<int>st;
         vector<int>res;
-        bool cycle=false;
         for(int i=0;i<n;i++){
-            if(vis[i]==0){
-                dfs(i,adj,vis,st,cycle);
-
-                if(cycle){
-                    return {};
-                }
+            if(!vis[i]){
+                dfs(adj,i,st,vis,inRecursion);
             }
         }
+
+        if(isCycle) return {};
         while(!st.empty()){
             res.push_back(st.top());
             st.pop();
         }
+
         return res;
+
+        
+
     }
     
     bool canFinish(int n, vector<vector<int>>& prerequisites) {
-        vector<int>topoRow= topoSort(prerequisites,n);
-        if(topoRow.empty()){
-            return false;
-        }
-        return true;
+        vector<int>topoRow=topoSort(prerequisites,n);
+        return !topoRow.empty();
     }
 };
