@@ -8,7 +8,7 @@ public:
         stack<int>st;
         for(auto it:nums2){
             while(!st.empty() && st.top()<it){
-                mp[st.top()]=it;
+                mp[st.top()]=it;  //storing next greater element
                 st.pop();
 
             }
